@@ -1,9 +1,13 @@
-import java.io.FileInputStream
-import java.util.Properties
+import com.vanniktech.maven.publish.AndroidMultiVariantLibrary
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.SonatypeHost
+import kotlin.math.sign
 
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+//    id("maven-publish")
+    id("com.vanniktech.maven.publish")
 }
 
 android {
@@ -37,40 +41,52 @@ android {
     }
 }
 
-//val artifactName = "followy-ui"
-//val artifactGroup = "ru.bashcony"
-//val artifactVersion = "0.0.1"
-//
-//publishing {
-//    publications {
-//        create<MavenPublication>("lib") {
-//            run {
-//                groupId = artifactGroup
-//                artifactId = artifactName
-//                version = artifactVersion
-////                from(components["java"])
-////                artifact(dokkaJar)
-//                artifact("$buildDir/outputs/aar/FollowyUI-release.aar")
-//            }
-//        }
-//    }
-//
-//    repositories {
-//        mavenLocal()
-//    }
-//}
-//
-//tasks.register("universalPublish") {
-//    dependsOn("assembleRelease")
-//    dependsOn("publish")
-//}
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+
+    configure(
+        AndroidSingleVariantLibrary(
+            sourcesJar = true,
+            publishJavadocJar = true,
+            variant = "release"
+        )
+    )
+
+    coordinates("ru.bashcony", "followy-ui", "0.1.2")
+
+    pom {
+        name.set("FollowyUI")
+        description.set("Library with graphic elements from Followy for Android")
+        inceptionYear.set("2024")
+        url.set("https://github.com/BrightOS/FollowyUI/")
+
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+            }
+        }
+
+        developers {
+            developer {
+                id.set("BrightOS")
+                name.set("Denis Shaykhlbarin")
+                url.set("https://github.com/BrightOS/")
+            }
+        }
+
+        scm {
+            url.set("https://github.com/BrightOS/FollowyUI/")
+            connection.set("scm:git@github.com/BrightOS/FollowyUI.git")
+            developerConnection.set("scm:git@github.com/BrightOS/FollowyUI.git")
+        }
+    }
+}
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    api(libs.androidx.core.ktx)
+    api(libs.androidx.appcompat)
+    api(libs.material)
 }

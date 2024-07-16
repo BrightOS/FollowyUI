@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.toColorInt
 import com.google.android.material.appbar.AppBarLayout
-import org.w3c.dom.Text
 
 /**
  * A class that represents an already configured AppBarLayout with

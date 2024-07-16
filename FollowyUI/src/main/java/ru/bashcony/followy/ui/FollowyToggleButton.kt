@@ -23,7 +23,6 @@ class FollowyToggleButton(
     val toggleIcon: ImageView
 
     override fun setChecked(checked: Boolean) {
-        val previousForegroundColor = toggleTitle.currentTextColor
         val foregroundColor = if (checked)
             context.getColorFromAttr(androidx.appcompat.R.attr.colorPrimary)
         else
