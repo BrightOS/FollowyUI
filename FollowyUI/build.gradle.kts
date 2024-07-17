@@ -1,7 +1,5 @@
-import com.vanniktech.maven.publish.AndroidMultiVariantLibrary
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 import com.vanniktech.maven.publish.SonatypeHost
-import kotlin.math.sign
 
 plugins {
     alias(libs.plugins.android.library)
@@ -41,6 +39,9 @@ android {
     }
 }
 
+/**
+ * ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
+ */
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
@@ -53,7 +54,7 @@ mavenPublishing {
         )
     )
 
-    coordinates("ru.bashcony", "followy-ui", "0.1.2")
+    coordinates("ru.bashcony", "followy-ui", "0.2.0")
 
     pom {
         name.set("FollowyUI")

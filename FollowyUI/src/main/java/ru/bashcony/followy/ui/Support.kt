@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
+import kotlin.math.roundToInt
 
 @ColorInt
 internal fun Context.getColorFromAttr(
@@ -19,7 +20,12 @@ internal fun Context.getColorFromAttr(
 internal val Number.dp
     get() = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics
-    )
+    ).roundToInt()
+
+internal val Number.sp
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics
+    ).roundToInt()
 
 internal val Number.px
     get() = (this.toFloat() / Resources.getSystem().displayMetrics.density)
