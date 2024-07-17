@@ -24,9 +24,9 @@ class FollowyToggleButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr, defStyleRes) {
 
-    val toggleTitle: TextView
-    val toggleIcon: ImageView
-    lateinit var rect: RectF
+    private val toggleTitle: TextView
+    private val toggleIcon: ImageView
+    private lateinit var rect: RectF
 
     var cornerRadius: Float = 15.dp.toFloat()
         set(value) {
@@ -73,15 +73,12 @@ class FollowyToggleButton @JvmOverloads constructor(
         }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        Log.d("OptimizedFollowyToggleButton", "onMeasure")
-
         measureChild(toggleIcon, widthMeasureSpec, heightMeasureSpec)
         measureChild(toggleTitle, widthMeasureSpec, heightMeasureSpec)
 
         val desiredHeight =
-            20.dp + toggleIcon.measuredHeight + toggleTitle.measuredHeight // Предполагаемая высота View
+            20.dp + toggleIcon.measuredHeight + toggleTitle.measuredHeight
 
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
@@ -89,15 +86,15 @@ class FollowyToggleButton @JvmOverloads constructor(
         val width = widthSize
 
         val height = when (heightMode) {
-            MeasureSpec.EXACTLY -> heightSize // Задан конкретный размер для высоты
+            MeasureSpec.EXACTLY -> heightSize
             MeasureSpec.AT_MOST -> min(
                 desiredHeight,
                 heightSize
-            ) // Размер не должен превышать заданный размер
-            else -> desiredHeight // Задать предпочтительный размер, если точного или максимального размера не задано
+            )
+            else -> desiredHeight
         }
 
-        setMeasuredDimension(width, height) // Устанавливаем фактический размер View
+        setMeasuredDimension(width, height)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -108,28 +105,17 @@ class FollowyToggleButton @JvmOverloads constructor(
         var y = paddingTop + iconLayoutParams.topMargin
 
         toggleIcon.layout(x, y, x + toggleIcon.measuredWidth, y + toggleIcon.measuredHeight)
-        Log.d(
-            "OptimizedFollowyToggleButton",
-            "onLayout icon $x $y ${x + toggleIcon.measuredWidth} ${y + toggleIcon.measuredHeight}"
-        )
 
         x = paddingLeft + titleLayoutParams.leftMargin
         y += toggleIcon.measuredHeight
 
         toggleTitle.layout(x, y, x + toggleTitle.measuredWidth, y + toggleTitle.measuredHeight)
-        Log.d(
-            "OptimizedFollowyToggleButton",
-            "onLayout title $x $y ${x + toggleTitle.measuredWidth} ${y + toggleTitle.measuredHeight}"
-        )
     }
 
-//    override fun generateDefaultLayoutParams(): MarginLayoutParams {
-//        return MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-//    }
+    override fun generateDefaultLayoutParams() =
+        MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 
     override fun onDraw(canvas: Canvas) {
-//        super.onDraw(canvas)
-        Log.d("OptimizedFollowyToggleButton", "onDraw $rect")
         canvas.drawRoundRect(rect, cornerRadius, cornerRadius, paint)
     }
 
@@ -184,11 +170,24 @@ class FollowyToggleButton @JvmOverloads constructor(
 
         attrs?.let {
             context.obtainStyledAttributes(attrs, R.styleable.FollowyToggleButton).apply {
-                toggleTitle.text = getText(R.styleable.FollowyToggleButton_title)
+                toggleTitle.text = getText(R.styleable.FollowyToggleButton_text)
 
                 getResourceId(R.styleable.FollowyToggleButton_icon, 0).let {
                     if (it != 0)
                         toggleIcon.setImageResource(it)
+                }
+
+                getResourceId(R.styleable.FollowyToggleButton_font, 0).let {
+                    try {
+                        toggleTitle.typeface = ResourcesCompat.getFont(
+                            context, if (it != 0)
+                                it
+                            else
+                                R.font.inter_medium
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
 
                 recycle()

@@ -74,7 +74,9 @@ class FollowyAppBar constructor(
      */
     var text: CharSequence
         get() = findViewById<TextView>(R.id.appbar_title).text
-        set(value) { findViewById<TextView>(R.id.appbar_title).text = value }
+        set(value) {
+            findViewById<TextView>(R.id.appbar_title).text = value
+        }
 
     init {
         View.inflate(context, R.layout.layout_followy_appbar, this)
@@ -124,19 +126,22 @@ class FollowyAppBar constructor(
             }
 
             text.text = typedArray.getText(
-                R.styleable.FollowyAppBar_titleText
+                R.styleable.FollowyAppBar_text
             )
 
             typedArray.getResourceId(
-                R.styleable.FollowyAppBar_textFont,
+                R.styleable.FollowyAppBar_font,
                 0
             ).let {
                 try {
-                    if (it != 0)
-                        text.typeface = ResourcesCompat.getFont(context, it)
+                    text.typeface = ResourcesCompat.getFont(
+                        context, if (it != 0)
+                            it
+                        else
+                            R.font.inter_semibold
+                    )
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    text.text = "WHAT THE FUCK JUST HAPPENED"
                 }
             }
 

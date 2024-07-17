@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class ru.bashcony.followy.ui.** { *; }
+-dontwarn java.lang.invoke.StringConcatFactory

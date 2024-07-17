@@ -1,28 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="FollowyButton">
-        <attr name="text" format="string" />
-        <attr name="activeColor" format="boolean" />
-    </declare-styleable>
 
-    <declare-styleable name="FollowyCard">
-        <attr name="animateByDefault" format="boolean" />
-        <attr name="backgroundChangeable" format="boolean" />
-        <attr name="followyCardBackground" format="color" />
-        <attr name="cardCornerRadius" format="dimension" />
-        <attr name="vibration" format="boolean" />
-    </declare-styleable>
+    <attr name="text" format="string" />
+    <attr name="font" format="reference" />
 
     <declare-styleable name="FollowyAppBar">
         <attr name="startIcon" format="reference" />
         <attr name="endIcon" format="reference" />
-        <attr name="titleText" format="string" />
-        <attr name="subtitleText" format="string" />
-        <attr name="textFont" format="reference" />
+        <attr name="text" />
+        <attr name="font" />
     </declare-styleable>
 
     <declare-styleable name="FollowyToggleButton">
-        <attr name="title" format="string" />
         <attr name="icon" format="reference" />
+        <attr name="text" />
+        <attr name="font" />
     </declare-styleable>
 </resources>

@@ -8,10 +8,10 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:font="@font/golos_semibold"
         app:layout_constraintTop_toTopOf="parent"
         app:startIcon="@drawable/ic_launcher_foreground"
-        app:textFont="@font/golos_semibold"
-        app:titleText="Опа" />
+        app:text="Опа" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -29,22 +29,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="5dp"
+                app:font="@font/golos_medium"
                 app:icon="@drawable/ic_looks_one"
                 app:layout_constraintEnd_toStartOf="@id/second"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:title="First" />
+                app:text="First" />
 
             <ru.bashcony.followy.ui.FollowyToggleButton
                 android:id="@+id/second"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
+                app:font="@font/golos_medium"
                 app:icon="@drawable/ic_looks_two"
                 app:layout_constraintEnd_toStartOf="@id/third"
                 app:layout_constraintStart_toEndOf="@id/first"
                 app:layout_constraintTop_toTopOf="parent"
-                app:title="Second" />
+                app:text="Second" />
 
             <ru.bashcony.followy.ui.FollowyToggleButton
                 android:id="@+id/third"
@@ -52,11 +54,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
+                app:font="@font/golos_medium"
                 app:icon="@drawable/ic_looks_three"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/second"
                 app:layout_constraintTop_toTopOf="parent"
-                app:title="Third" />
+                app:text="Third" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
