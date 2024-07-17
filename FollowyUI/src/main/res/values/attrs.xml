@@ -7,12 +7,24 @@
     <declare-styleable name="FollowyAppBar">
         <attr name="startIcon" format="reference" />
         <attr name="endIcon" format="reference" />
+        <attr name="startIconTinting" format="enum">
+            <enum name="enabled" value="0"/>
+            <enum name="disabled" value="1"/>
+        </attr>
+        <attr name="endIconTinting" format="enum">
+            <enum name="enabled" value="0"/>
+            <enum name="disabled" value="1"/>
+        </attr>
         <attr name="text" />
         <attr name="font" />
     </declare-styleable>
 
     <declare-styleable name="FollowyToggleButton">
         <attr name="icon" format="reference" />
+        <attr name="iconTinting" format="enum">
+            <enum name="enabled" value="0"/>
+            <enum name="disabled" value="1"/>
+        </attr>
         <attr name="text" />
         <attr name="font" />
     </declare-styleable>

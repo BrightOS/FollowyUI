@@ -26,6 +26,7 @@ class FollowyToggleButton @JvmOverloads constructor(
 
     private val toggleTitle: TextView
     private val toggleIcon: ImageView
+    private var toggleIconTintable: Boolean = true
     private lateinit var rect: RectF
 
     var cornerRadius: Float = 15.dp.toFloat()
@@ -67,7 +68,8 @@ class FollowyToggleButton @JvmOverloads constructor(
             }
 
             toggleTitle.setTextColor(foregroundColor)
-            toggleIcon.imageTintList = ColorStateList.valueOf(foregroundColor)
+            if (toggleIconTintable)
+                toggleIcon.imageTintList = ColorStateList.valueOf(foregroundColor)
 
             field = value
         }
@@ -91,6 +93,7 @@ class FollowyToggleButton @JvmOverloads constructor(
                 desiredHeight,
                 heightSize
             )
+
             else -> desiredHeight
         }
 
@@ -162,7 +165,6 @@ class FollowyToggleButton @JvmOverloads constructor(
 
         toggleIcon = ImageView(context).also {
             it.layoutParams = MarginLayoutParams(24.dp, 24.dp)
-            it.imageTintList = ColorStateList.valueOf(foregroundColor)
         }
 
         addView(toggleIcon)
@@ -175,6 +177,11 @@ class FollowyToggleButton @JvmOverloads constructor(
                 getResourceId(R.styleable.FollowyToggleButton_icon, 0).let {
                     if (it != 0)
                         toggleIcon.setImageResource(it)
+                }
+
+                (getInt(R.styleable.FollowyToggleButton_iconTinting, 0) == 0).let {
+                    toggleIconTintable = it
+                    if (it) toggleIcon.imageTintList = ColorStateList.valueOf(foregroundColor)
                 }
 
                 getResourceId(R.styleable.FollowyToggleButton_font, 0).let {
