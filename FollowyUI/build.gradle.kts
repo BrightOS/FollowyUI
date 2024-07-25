@@ -54,7 +54,7 @@ mavenPublishing {
         )
     )
 
-    coordinates("ru.bashcony", "followy-ui", "0.2.4")
+    coordinates("ru.bashcony", "followy-ui", "0.2.5")
 
     pom {
         name.set("FollowyUI")

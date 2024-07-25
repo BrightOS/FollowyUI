@@ -30,28 +30,34 @@ class FollowyToggleButton @JvmOverloads constructor(
     private var toggleIconTintable: Boolean = true
     private lateinit var rect: RectF
 
+    private val placeholderBackgroundColor =
+        context.getColorFromAttr(com.google.android.material.R.attr.colorSurface)
+
+    private val placeholderForegroundColor =
+        context.getColorFromAttr(androidx.appcompat.R.attr.colorAccent)
+
     val defaultBackgroundColor = MaterialColors.getColor(
         context,
         com.google.android.material.R.attr.colorSurfaceContainerHigh,
-        Color.BLACK
+        placeholderBackgroundColor
     )
 
     val selectedBackgroundColor = MaterialColors.getColor(
         context,
         com.google.android.material.R.attr.colorPrimaryContainer,
-        Color.BLACK
+        placeholderBackgroundColor
     )
 
     val defaultForegroundColor = MaterialColors.getColor(
         context,
         com.google.android.material.R.attr.colorOnSurfaceVariant,
-        Color.BLACK
+        placeholderForegroundColor
     )
 
     val selectedForegroundColor = MaterialColors.getColor(
         context,
         com.google.android.material.R.attr.colorPrimary,
-        Color.BLACK
+        placeholderForegroundColor
     )
 
     var cornerRadius: Float = 15.dp.toFloat()
@@ -61,7 +67,6 @@ class FollowyToggleButton @JvmOverloads constructor(
         }
 
     val paint = Paint().apply {
-        color = defaultForegroundColor
         style = Paint.Style.FILL
         isAntiAlias = true
     }
@@ -196,7 +201,8 @@ class FollowyToggleButton @JvmOverloads constructor(
 
                 (getInt(R.styleable.FollowyToggleButton_iconTinting, 0) == 0).let {
                     toggleIconTintable = it
-                    if (it) toggleIcon.imageTintList = ColorStateList.valueOf(defaultForegroundColor)
+                    if (it) toggleIcon.imageTintList =
+                        ColorStateList.valueOf(defaultForegroundColor)
                 }
 
                 getResourceId(R.styleable.FollowyToggleButton_font, 0).let {
@@ -215,6 +221,8 @@ class FollowyToggleButton @JvmOverloads constructor(
                 recycle()
             }
         }
+
+        isChecked = false
 
         setPadding(10.dp)
         setWillNotDraw(false)
