@@ -5,18 +5,19 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.text.TextUtils
 import android.util.AttributeSet
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.toRectF
 import androidx.core.view.setPadding
+import com.google.android.material.color.MaterialColors
 import kotlin.math.min
 
 
@@ -29,6 +30,30 @@ class FollowyToggleButton @JvmOverloads constructor(
     private var toggleIconTintable: Boolean = true
     private lateinit var rect: RectF
 
+    val defaultBackgroundColor = MaterialColors.getColor(
+        context,
+        com.google.android.material.R.attr.colorSurfaceContainerHigh,
+        Color.BLACK
+    )
+
+    val selectedBackgroundColor = MaterialColors.getColor(
+        context,
+        com.google.android.material.R.attr.colorPrimaryContainer,
+        Color.BLACK
+    )
+
+    val defaultForegroundColor = MaterialColors.getColor(
+        context,
+        com.google.android.material.R.attr.colorOnSurfaceVariant,
+        Color.BLACK
+    )
+
+    val selectedForegroundColor = MaterialColors.getColor(
+        context,
+        com.google.android.material.R.attr.colorPrimary,
+        Color.BLACK
+    )
+
     var cornerRadius: Float = 15.dp.toFloat()
         set(value) {
             field = value
@@ -36,24 +61,16 @@ class FollowyToggleButton @JvmOverloads constructor(
         }
 
     val paint = Paint().apply {
-        color =
-            context.getColorFromAttr(com.google.android.material.R.attr.colorSurfaceContainerHigh)
+        color = defaultForegroundColor
         style = Paint.Style.FILL
         isAntiAlias = true
     }
 
     var isChecked: Boolean = false
         set(value) {
-            val foregroundColor = if (value)
-                context.getColorFromAttr(androidx.appcompat.R.attr.colorPrimary)
-            else
-                context.getColorFromAttr(com.google.android.material.R.attr.colorOnSurfaceVariant)
-
+            val foregroundColor = if (value) selectedForegroundColor else defaultForegroundColor
             val previousBackgroundColor = paint.color
-            val backgroundColor = if (value)
-                context.getColorFromAttr(com.google.android.material.R.attr.colorPrimaryContainer)
-            else
-                context.getColorFromAttr(com.google.android.material.R.attr.colorSurfaceContainerHigh)
+            val backgroundColor = if (value) selectedBackgroundColor else defaultBackgroundColor
 
             ObjectAnimator.ofObject(
                 paint,
@@ -150,8 +167,6 @@ class FollowyToggleButton @JvmOverloads constructor(
     init {
         inflate(context, R.layout.layout_followy_toggle_button, this)
 
-        val foregroundColor = context.getColorFromAttr(androidx.appcompat.R.attr.colorPrimary)
-
         toggleTitle = TextView(context).also {
             it.layoutParams =
                 MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
@@ -160,7 +175,7 @@ class FollowyToggleButton @JvmOverloads constructor(
             it.isSingleLine = true
             it.isSelected = true
             it.typeface = ResourcesCompat.getFont(context, R.font.inter_medium)
-            it.setTextColor(foregroundColor)
+            it.setTextColor(defaultForegroundColor)
         }
 
         toggleIcon = ImageView(context).also {
@@ -181,7 +196,7 @@ class FollowyToggleButton @JvmOverloads constructor(
 
                 (getInt(R.styleable.FollowyToggleButton_iconTinting, 0) == 0).let {
                     toggleIconTintable = it
-                    if (it) toggleIcon.imageTintList = ColorStateList.valueOf(foregroundColor)
+                    if (it) toggleIcon.imageTintList = ColorStateList.valueOf(defaultForegroundColor)
                 }
 
                 getResourceId(R.styleable.FollowyToggleButton_font, 0).let {
@@ -200,8 +215,6 @@ class FollowyToggleButton @JvmOverloads constructor(
                 recycle()
             }
         }
-
-        isChecked = false
 
         setPadding(10.dp)
         setWillNotDraw(false)

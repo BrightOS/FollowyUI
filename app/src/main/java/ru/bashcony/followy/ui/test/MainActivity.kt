@@ -2,6 +2,7 @@ package ru.bashcony.followy.ui.test
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.color.DynamicColors
 import ru.bashcony.followy.ui.FollowyToggleButton
 import ru.bashcony.followy.ui.test.databinding.ActivityMainBinding
 
@@ -11,6 +12,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        DynamicColors.applyToActivityIfAvailable(this)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
