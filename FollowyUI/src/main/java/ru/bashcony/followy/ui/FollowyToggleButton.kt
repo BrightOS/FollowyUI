@@ -30,8 +30,7 @@ class FollowyToggleButton @JvmOverloads constructor(
     private var toggleIconTintable: Boolean = true
     private lateinit var rect: RectF
 
-    private val placeholderBackgroundColor =
-        context.getColorFromAttr(com.google.android.material.R.attr.colorSurface)
+    private val placeholderBackgroundColor = Color.TRANSPARENT
 
     private val placeholderForegroundColor =
         context.getColorFromAttr(androidx.appcompat.R.attr.colorAccent)
@@ -67,8 +66,13 @@ class FollowyToggleButton @JvmOverloads constructor(
         }
 
     val paint = Paint().apply {
+        color = defaultBackgroundColor
         style = Paint.Style.FILL
         isAntiAlias = true
+    }
+
+    override fun isClickable(): Boolean {
+        return true
     }
 
     var isChecked: Boolean = false

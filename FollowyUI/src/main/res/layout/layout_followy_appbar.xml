@@ -4,17 +4,20 @@
     android:id="@+id/appbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clipChildren="false"
     app:elevation="0dp"
     tools:parentTag="com.google.android.material.appbar.AppBarLayout">
 
     <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:id="@+id/followy_collapsing_toolbar"
         style="?attr/collapsingToolbarLayoutStyle"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:fitsSystemWindows="true"
+        android:layout_height="?attr/actionBarSize"
+        app:titleEnabled="false"
         app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/followy_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_gravity="bottom"
@@ -52,6 +55,7 @@
                     android:gravity="center"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:maxLines="1"
+                    android:text="sdfgs"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
 

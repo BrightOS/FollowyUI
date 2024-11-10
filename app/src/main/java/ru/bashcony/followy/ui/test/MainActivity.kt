@@ -1,5 +1,6 @@
 package ru.bashcony.followy.ui.test
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.color.DynamicColors
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
         DynamicColors.applyToActivityIfAvailable(this)
 
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -29,5 +31,12 @@ class MainActivity : AppCompatActivity() {
                 binding.appbar.text = "Third selected"
             }
         ))
+
+        binding.third.isChecked = true
+
+        binding.testCard.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
     }
 }

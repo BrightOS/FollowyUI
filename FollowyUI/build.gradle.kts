@@ -4,13 +4,12 @@ import com.vanniktech.maven.publish.SonatypeHost
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-//    id("maven-publish")
     id("com.vanniktech.maven.publish")
 }
 
 android {
     namespace = "ru.bashcony.followy.ui"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -54,7 +53,7 @@ mavenPublishing {
         )
     )
 
-    coordinates("ru.bashcony", "followy-ui", "0.2.5")
+    coordinates("ru.bashcony", "followy-ui", "0.2.8")
 
     pom {
         name.set("FollowyUI")
@@ -80,8 +79,8 @@ mavenPublishing {
 
         scm {
             url.set("https://github.com/BrightOS/FollowyUI/")
-            connection.set("scm:git@github.com/BrightOS/FollowyUI.git")
-            developerConnection.set("scm:git@github.com/BrightOS/FollowyUI.git")
+            connection.set("scm:git:git//github.com/BrightOS/FollowyUI.git")
+            developerConnection.set("scm:git:git@github.com:BrightOS/FollowyUI.git")
         }
     }
 }

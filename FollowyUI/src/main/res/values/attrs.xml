@@ -17,6 +17,8 @@
         </attr>
         <attr name="text" />
         <attr name="font" />
+        <attr name="configureInsets" format="boolean" />
+        <attr name="toolbarPadding" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="FollowyToggleButton">

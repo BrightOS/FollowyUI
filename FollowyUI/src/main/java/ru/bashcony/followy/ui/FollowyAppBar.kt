@@ -3,12 +3,20 @@ package ru.bashcony.followy.ui
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.Insets
 import androidx.core.graphics.toColorInt
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 
 /**
  * A class that represents an already configured AppBarLayout with
@@ -69,14 +77,25 @@ class FollowyAppBar constructor(
 
     /**
      * Text in the center of AppBar
-     * @param value text to be set in the appbar
-     * @return text set in appbar
      */
     var text: CharSequence
         get() = findViewById<TextView>(R.id.appbar_title).text
         set(value) {
             findViewById<TextView>(R.id.appbar_title).text = value
         }
+
+    /**
+     *
+     */
+    var toolbarPadding: Int = 40.dp
+
+    var configureInsets: Boolean = true
+
+    private val collapsingToolbar: CollapsingToolbarLayout
+        get() = findViewById(R.id.followy_collapsing_toolbar)
+
+    private val toolbar: Toolbar
+        get() = findViewById(R.id.followy_toolbar)
 
     init {
         View.inflate(context, R.layout.layout_followy_appbar, this)
@@ -87,27 +106,8 @@ class FollowyAppBar constructor(
         val text = findViewById<View>(R.id.appbar_title) as TextView
         text.isSelected = true
 
-        addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-            text.scaleX = 1f + verticalOffset / (appBarLayout.totalScrollRange.toFloat() / 0.15f)
-            text.scaleY = 1f + verticalOffset / (appBarLayout.totalScrollRange.toFloat() / 0.15f)
-//            val vaX = ObjectAnimator.ofFloat(
-//                text,
-//                SCALE_X,
-//                1f + verticalOffset / (appBarLayout.totalScrollRange.toFloat() / 0.15f)
-//            )
-//            val vaY = ObjectAnimator.ofFloat(
-//                text,
-//                SCALE_Y,
-//                1f + verticalOffset / (appBarLayout.totalScrollRange.toFloat() / 0.15f)
-//            )
-//            vaX.duration = 300
-//            vaY.duration = 300
-//            vaX.start()
-//            vaY.start()
-        }
-
-        attrs?.let {
-            val typedArray = context.obtainStyledAttributes(it, R.styleable.FollowyAppBar)
+        attrs?.let { attributes ->
+            val typedArray = context.obtainStyledAttributes(attributes, R.styleable.FollowyAppBar)
 
             typedArray.getResourceId(
                 R.styleable.FollowyAppBar_startIcon,
@@ -145,7 +145,71 @@ class FollowyAppBar constructor(
                 }
             }
 
+            typedArray.getBoolean(
+                R.styleable.FollowyAppBar_configureInsets,
+                true,
+            ).let {
+                this.configureInsets = it
+            }
+
+            typedArray.getDimensionPixelSize(
+                R.styleable.FollowyAppBar_toolbarPadding,
+                40.dp,
+            ).let {
+                this.toolbarPadding = it
+            }
+
             typedArray.recycle()
         }
+
+        configureInsets()
+
+        addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+//            text.scaleX = 1f + verticalOffset / (appBarLayout.totalScrollRange.toFloat() / 0.15f)
+//            text.scaleY = 1f + verticalOffset / (appBarLayout.totalScrollRange.toFloat() / 0.15f)
+        }
     }
+
+    private fun configureInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(this) { _, windowInsets ->
+            val defaultToolbarSize = obtainDefaultToolbarSize()
+
+            val insets =
+                if (configureInsets)
+                    windowInsets.getInsets(
+                        WindowInsetsCompat.Type.systemBars()
+                                or WindowInsetsCompat.Type.ime()
+                                or WindowInsetsCompat.Type.displayCutout()
+                    )
+                else
+                    Insets.of(0, 0, 0, 0)
+
+            toolbar.updatePadding(
+                left = insets.left,
+                top = insets.top,
+                right = insets.right,
+            )
+
+            collapsingToolbar.scrimVisibleHeightTrigger =
+                defaultToolbarSize + insets.top + toolbarPadding / 2
+
+            collapsingToolbar.updateLayoutParams<MarginLayoutParams> {
+                this.height = defaultToolbarSize + insets.top + toolbarPadding
+            }
+
+            toolbar.updateLayoutParams<MarginLayoutParams> {
+                this.height = defaultToolbarSize + insets.top
+            }
+
+            windowInsets
+        }
+    }
+
+    private fun obtainDefaultToolbarSize() =
+        TypedValue.complexToDimensionPixelSize(
+            TypedValue().apply {
+                context.theme.resolveAttribute(android.R.attr.actionBarSize, this, true)
+            }.data,
+            context.resources.displayMetrics
+        )
 }
