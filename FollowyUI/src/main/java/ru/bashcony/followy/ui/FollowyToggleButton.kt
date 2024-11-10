@@ -2,6 +2,7 @@ package ru.bashcony.followy.ui
 
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Canvas
@@ -11,6 +12,7 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -55,7 +57,7 @@ class FollowyToggleButton @JvmOverloads constructor(
 
     val selectedForegroundColor = MaterialColors.getColor(
         context,
-        com.google.android.material.R.attr.colorPrimary,
+        com.google.android.material.R.attr.colorOnPrimaryContainer,
         placeholderForegroundColor
     )
 
@@ -65,8 +67,14 @@ class FollowyToggleButton @JvmOverloads constructor(
             invalidate()
         }
 
-    val paint = Paint().apply {
+    val backgroundPaint = Paint().apply {
         color = defaultBackgroundColor
+        style = Paint.Style.FILL
+        isAntiAlias = true
+    }
+
+    val foregroundPaint = Paint().apply {
+        color = defaultForegroundColor
         style = Paint.Style.FILL
         isAntiAlias = true
     }
@@ -77,12 +85,13 @@ class FollowyToggleButton @JvmOverloads constructor(
 
     var isChecked: Boolean = false
         set(value) {
+            val previousForegroundColor = toggleTitle.currentTextColor
             val foregroundColor = if (value) selectedForegroundColor else defaultForegroundColor
-            val previousBackgroundColor = paint.color
+            val previousBackgroundColor = backgroundPaint.color
             val backgroundColor = if (value) selectedBackgroundColor else defaultBackgroundColor
 
             ObjectAnimator.ofObject(
-                paint,
+                backgroundPaint,
                 "color",
                 ArgbEvaluator(),
                 previousBackgroundColor,
@@ -93,9 +102,18 @@ class FollowyToggleButton @JvmOverloads constructor(
                 start()
             }
 
-            toggleTitle.setTextColor(foregroundColor)
-            if (toggleIconTintable)
-                toggleIcon.imageTintList = ColorStateList.valueOf(foregroundColor)
+            ValueAnimator.ofArgb(
+                previousForegroundColor,
+                foregroundColor
+            ).apply {
+                duration = 150
+                addUpdateListener {
+                    toggleTitle.setTextColor(it.getAnimatedValue() as Int)
+                    if (toggleIconTintable)
+                        toggleIcon.imageTintList = ColorStateList.valueOf(it.getAnimatedValue() as Int)
+                }
+                start()
+            }
 
             field = value
         }
@@ -145,7 +163,7 @@ class FollowyToggleButton @JvmOverloads constructor(
         MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, paint)
+        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, backgroundPaint)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -234,10 +252,14 @@ class FollowyToggleButton @JvmOverloads constructor(
 
     companion object {
         fun synchronizeButtons(buttons: List<Pair<FollowyToggleButton, () -> Unit>>) {
+            Log.d("AAA", "synchronizeButtons ${buttons.joinToString(" ")}")
             buttons.forEach { pair ->
+                Log.d("AAA", "First set click listener")
+                pair.first.isClickable = true
                 pair.first.setOnClickListener {
+                    Log.d("AAA", "Clicked")
                     pair.first.isChecked = true
-                    buttons.filter { it != pair }.forEach { it.first.isChecked = false }
+                    buttons.filter { it.first != pair.first }.forEach { it.first.isChecked = false }
                     pair.second()
                 }
             }

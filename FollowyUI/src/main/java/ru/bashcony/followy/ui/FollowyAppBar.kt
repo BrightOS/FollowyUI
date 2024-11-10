@@ -85,10 +85,13 @@ class FollowyAppBar constructor(
         }
 
     /**
-     *
+     * Height difference between the maximum and minimum FollowyAppBar size value
      */
     var toolbarPadding: Int = 40.dp
 
+    /**
+     * Does this view need to handle window insets properly?
+     */
     var configureInsets: Boolean = true
 
     private val collapsingToolbar: CollapsingToolbarLayout
@@ -165,15 +168,15 @@ class FollowyAppBar constructor(
         configureInsets()
 
         addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-//            text.scaleX = 1f + verticalOffset / (appBarLayout.totalScrollRange.toFloat() / 0.15f)
-//            text.scaleY = 1f + verticalOffset / (appBarLayout.totalScrollRange.toFloat() / 0.15f)
+            text.scaleX =
+                1f + (verticalOffset / (appBarLayout.totalScrollRange.toFloat() / 0.15f)).let { if (it.isNaN()) 0f else it }
+            text.scaleY =
+                1f + (verticalOffset / (appBarLayout.totalScrollRange.toFloat() / 0.15f)).let { if (it.isNaN()) 0f else it }
         }
     }
 
     private fun configureInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(this) { _, windowInsets ->
-            val defaultToolbarSize = obtainDefaultToolbarSize()
-
             val insets =
                 if (configureInsets)
                     windowInsets.getInsets(
@@ -184,24 +187,33 @@ class FollowyAppBar constructor(
                 else
                     Insets.of(0, 0, 0, 0)
 
-            toolbar.updatePadding(
-                left = insets.left,
-                top = insets.top,
-                right = insets.right,
-            )
-
-            collapsingToolbar.scrimVisibleHeightTrigger =
-                defaultToolbarSize + insets.top + toolbarPadding / 2
-
-            collapsingToolbar.updateLayoutParams<MarginLayoutParams> {
-                this.height = defaultToolbarSize + insets.top + toolbarPadding
-            }
-
-            toolbar.updateLayoutParams<MarginLayoutParams> {
-                this.height = defaultToolbarSize + insets.top
-            }
+            handleUpdatedInsets(insets)
 
             windowInsets
+        }
+
+        if (!configureInsets)
+            handleUpdatedInsets(Insets.of(0, 0, 0, 0))
+    }
+
+    private fun handleUpdatedInsets(insets: Insets) {
+        val defaultToolbarSize = obtainDefaultToolbarSize()
+
+        toolbar.updatePadding(
+            left = insets.left,
+            top = insets.top,
+            right = insets.right,
+        )
+
+        collapsingToolbar.scrimVisibleHeightTrigger =
+            defaultToolbarSize + insets.top + toolbarPadding / 2
+
+        collapsingToolbar.updateLayoutParams<MarginLayoutParams> {
+            this.height = defaultToolbarSize + insets.top + toolbarPadding
+        }
+
+        toolbar.updateLayoutParams<MarginLayoutParams> {
+            this.height = defaultToolbarSize + insets.top
         }
     }
 

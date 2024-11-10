@@ -11,8 +11,8 @@
         app:font="@font/golos_semibold"
         app:layout_constraintTop_toTopOf="parent"
         app:startIcon="@drawable/ic_launcher_foreground"
-        app:toolbarPadding="40dp"
-        app:text="Example application" />
+        app:text="Example application"
+        app:toolbarPadding="40dp" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

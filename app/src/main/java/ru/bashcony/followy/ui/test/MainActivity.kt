@@ -2,6 +2,7 @@ package ru.bashcony.followy.ui.test
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.color.DynamicColors
 import ru.bashcony.followy.ui.FollowyToggleButton
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         DynamicColors.applyToActivityIfAvailable(this)
-
+        enableEdgeToEdge()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             }
         ))
 
-        binding.third.isChecked = true
+//        binding.third.isChecked = true
 
         binding.testCard.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
