@@ -12,7 +12,6 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.text.TextUtils
 import android.util.AttributeSet
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -69,12 +68,6 @@ class FollowyToggleButton @JvmOverloads constructor(
 
     val backgroundPaint = Paint().apply {
         color = defaultBackgroundColor
-        style = Paint.Style.FILL
-        isAntiAlias = true
-    }
-
-    val foregroundPaint = Paint().apply {
-        color = defaultForegroundColor
         style = Paint.Style.FILL
         isAntiAlias = true
     }
@@ -252,12 +245,9 @@ class FollowyToggleButton @JvmOverloads constructor(
 
     companion object {
         fun synchronizeButtons(buttons: List<Pair<FollowyToggleButton, () -> Unit>>) {
-            Log.d("AAA", "synchronizeButtons ${buttons.joinToString(" ")}")
             buttons.forEach { pair ->
-                Log.d("AAA", "First set click listener")
                 pair.first.isClickable = true
                 pair.first.setOnClickListener {
-                    Log.d("AAA", "Clicked")
                     pair.first.isChecked = true
                     buttons.filter { it.first != pair.first }.forEach { it.first.isChecked = false }
                     pair.second()
